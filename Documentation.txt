@@ -1,0 +1,292 @@
+_______________________________________________________________________________________________________________________________________
+CO PROJECT - 1
+_______________________________________________________________________________________________________________________________________
+Implementing a Two-Pass Assembler
+_______________________________________________________________________________________________________________________________________
+
+
+Aditi Sejal 	2019228
+Ashmeet Singh 	2019412
+
+
+_______________________________________________________________________________________________________________________________________
+Project Outcome
+_______________________________________________________________________________________________________________________________________
+In this projected we have implemented a two-pass assembler through our java code. This project on successful execution 
+translates assembly code in an input file to machine code in an output file while printing suitable messages like the ones 
+indicating
+
+1) Successful termination of the program
+2) Warning messages
+3) The symbol table on the console. 
+4) The operand table on the console
+
+Otherwise, it prints the fatal errors encountered along with the erroneous line’s number for it to be corrected by the user. 
+
+_______________________________________________________________________________________________________________________________________
+Project Code Contents
+_______________________________________________________________________________________________________________________________________
+There are three main code snippets – 
+
+1) A file for the first pass
+2) Another file for the second pass and 
+3) One for the final combination of these which will be executed. 
+There are also two classes which contain the template for the Symbols and Opcodes used in the program.
+
+_______________________________________________________________________________________________________________________________________
+Project Workflow
+_______________________________________________________________________________________________________________________________________
+1)The “Assembler” class which is the main class makes calls to all functions and sub-functions in the first pass (“Pass1”) and the 
+second pass (“Pass2”). It handles the main workflow of the assembler. 
+
+_______________________________________________________________________________________________________________________________________
+2)The First Pass
+_______________________________________________________________________________________________________________________________________
+
+a)It reads through the code once and produces the essential intermediates required - symbol table, operand table if there are
+no errors and warnings. Otherwise, it lists the warnings, modifies symbol table and operand table to accommodate these errors 
+and then outputs these tables as well as a success message. If an error occurs it exits the program.
+
+b)API Documentation
+
+i)public static void dictmaker()
+->Makes a dictionary with assembly opcodes as keys and their corresponding opcodes in machine language as items. 
+
+ii)public static void file_reader()
+->Reads each line from the input file whose path and name are specified and calls the function instructionmaker(...,...) for each 
+line.
+
+iii)public static int check_for_valid_opcode(String instruct[])
+->Takes the lines read from the input file in the form of an array of strings as input and looks for a valid opcode in it by 
+comparing each element with the keys in the opcode dictionary made above.
+
+iv)public static boolean symbol_value_finder(String instruct[], int inum)
+->Takes the lines read from the input file in the form of an array of strings and the line number as input and returns a boolean
+value to tell whether the instruction defines a symbol i.e. specifies the value of a symbol after using the 'DC', 'DB' or 'DW' 
+commands.
+
+v)public static boolean branch_statement(String instruct[])
+->Takes the lines read from the input file in the form of an array of strings as input and returns a boolean value to tell if the 
+valid opcode present in the instruction array is a branch statement.
+
+vi)public static void final_symbol_table_check()
+->Modifies the symbol table by making fields such as the values and line numbers of the Symbols as defined in the 'Symbols' class
+same for all the symbols in the table which might be occurring more than once and thus have different values.
+
+vii)public static void operand_checker()
+->Checks for errors in the instruction by checking the opcode table and symbol table for multiple or no operands per line 
+according to the opcodes in that line and printing error/warning messages.
+
+viii)public static void clean_operands(int inum, int n_of_op)
+->Takes the instruction line number and the number of operands required by opcode in that line as input and removes 
+unwanted operands in warning cases. 
+NOTE: OPERANDS ARE REMOVED FROM THE OPERAND TABLE BY MAKING THEIR FIELD DENOTING THE INSTRUCTION 
+NUMBER WHERE THEY OCCUR I.E. 'LINENO' AS -1.
+
+ix)public static void line_cleaner(int inum)
+->Takes the instruction line number as input and removes operands and symbols from the tables. This is done in cases
+when the warning requires an entire line to be ignored and the rest of the program to be assembled.
+NOTE: OPERANDS AND SYMBOLS ARE REMOVED FROM THE OPERAND TABLE AND SYMBOL TABLE BY MAKING THEIR 
+FIELD DENOTING THE INSTRUCTION NUMBER WHERE THEY OCCUR I.E. 'LINENO' AS '-1'.
+
+x)public static int symbol_checker()
+->Looks for an undefined symbol in the symbol table and returns 1 when an undefined symbol is found and 0 when not 
+found respectively.
+
+xi)public static void instructionmaker(String instruction, int ino)
+->Takes the lines read from the input file in the form of an array of strings and the line number as input and classifies each
+element of the array as an operand/symbol etc. and controls the flow of adding them to their suitable tables. This is the
+main function which calls the above sub-functions for efficient completion of the sub-tasks.
+
+xii)public static void add_variable(String instruct[], int opcode_at,int inum)
+->Takes the lines read from the input file in the form of an array of strings, the index of the valid opcode in this string array
+and the line number as input and adds a valid symbol to the symbol table.
+
+_______________________________________________________________________________________________________________________________________
+3)The Second Pass
+_______________________________________________________________________________________________________________________________________
+
+a)It uses the symbol table and opcode table created by the first pass to generate machine code by allocating addresses to
+each symbol, instruction and corresponding binary representation of opcodes. It creates an output arraylist of strings which
+contains the corresponding machine code of each line after the warnings and errors have been taken care of by the first 
+pass. The second pass works only if the first pass is successful.
+
+b)API Documentation
+
+i)public static int counter(String symname)
+->Takes the name of the symbol in string form as input and counts the number of its occurrences in the arraylist 'sym'. It returns
+this count.
+
+ii)public static void symbol_table_checker()
+->Assigns the same address to symbols occurring many times in the symbol table.
+
+iii)public static void symbol_addressor()
+->To every unique symbol or first occurrence of a symbol in case of multiple occurrences in the symbol table, assigns a sequential
+memory address in the order of their appearance. 
+NOTE: MEMORY ADDRESSES FOR SYMBOLS HAVE BEEN STARTED FROM 10000000 (DECIMAL 128).
+
+iv)public static String formatter(int a)
+->Takes an integer as input and returns its binary representation in string form.
+
+v)public static void output_maker()
+->Generates machine code of instructions line by line by calling above defined functions for efficient completion of sub-tasks.
+
+vi)public static void writer()
+->Function for writing to the machine code to an output file.
+
+_______________________________________________________________________________________________________________________________________
+4) THE MAIN CLASS
+_______________________________________________________________________________________________________________________________________
+
+a)This class calls the two passes and is responsible for the execution of the project.
+
+b)First, a call to the first pass is made. 
+
+c)If successful, the warnings, the symbol table and operand table are printed on the console and a call to the second pass is
+made.
+
+d) If not, the fatal error and its line number are printed on the console and the program is terminated.
+
+e)The second pass is executed only if the first pass is successful and writes the machine code formed to an output file.
+
+f)The program ends with a success message on the console.
+
+_______________________________________________________________________________________________________________________________________
+Project Execution Instructions
+_______________________________________________________________________________________________________________________________________
+
+While in the directory 2019228_2019412_Project1, type the following commands in cmd:
+
+cd 2019228_2019412_Code
+javac ./Code_2019228_2019412/Assembler.java
+java Code_2019228_2019412/Assembler
+
+
+NOTE: THE INPUT FILE'S PATH AND NAME MUST BE SPECIFIED IN THE FIRST PASS IN THE FILE READER FUNCTION.
+
+_______________________________________________________________________________________________________________________________________
+Error Reporting
+_______________________________________________________________________________________________________________________________________
+
+The following are the errors that an assembler can encounter :
+    1. A symbol has been used but not defined
+    2. A symbol has been defined more than once
+    3. The name in the opcode field is not a legal opcode
+    4. An opcode is not supplied  with enough operands
+    5. An opcode is supplied  with too many operands 
+    6. The STP statement is missing
+
+Out of these only the first is treated as a fatal error as the program can't run after this and hence first pass execution is
+stopped. The rest are treated as warnings and ways around these are taken to complete the least erroneous execution of 
+the program. 
+
+These errors have been reported and handled in the first pass itself in the following ways:
+
+_______________________________________________________________________________________________________________________________________
+1) A symbol has been used but not defined
+_______________________________________________________________________________________________________________________________________
+On ecountering this error this message is printed on the console :
+
+	"ERROR! UndefinedSymbolException"
+	"--- Symbol INTERMEDIATE is used at line 4 but never defined ---"
+
+Following this, a "First Pass Unsuccessful" message is also printed and the program terminates.
+
+This error occurs when a symbol is used in the assembly program but not defined at the end and thus has no known value.
+We have treated it this way as an undefined symbol has no value and thus can not be used in the program for further
+operations. It is a mistake by the user and must be rectified for proper execution of the program. That is why our Assembler
+mentions the erroneous line's number and the symbol's name for prompt correction by the user.
+
+_______________________________________________________________________________________________________________________________________
+2) A symbol has been defined more than once
+_______________________________________________________________________________________________________________________________________
+On ecountering this error this message is printed on the console :
+
+	"WARNING! MultipleDefinitionsForSymbolException"
+	"--- Symbol I has been defined more than once at line 11 ---"
+
+Following this the value of the symbol defined later is taken as the final value for the symbol and the corresponding machine
+code is generated. This error occurs when a symbol is defined twice in the assembly program, whether the initialisation is with
+the same numerical value or not. We have treated it this way assuming that multiple definitions for a variable occur only when
+the user is consciously redefining a variable and since the latter definition is more recent assuming that the program is written
+in order from top to bottom. The last definition's line number is printed for the user to reconsider his/her program.
+
+
+_______________________________________________________________________________________________________________________________________
+3)The name in the opcode field is not a legal opcode
+_______________________________________________________________________________________________________________________________________
+On ecountering this error this message is printed on the console :
+
+	"WARNING! IllegalOpcodeException"
+	"--- Invalid Opcode at line 4 ---"
+
+Following this the entire line is ignored and the assembler moves on to the next line. The line containing the invalid opcode is
+treated as a comment i.e. it is not evaluated. All the symbols in this line are removed from the symbol table. This error occurs
+when an invalid opcode is used, most probably a typo. Illegal opcodes are those which are not present in the list of opcodes
+given. We have treated it this way as a single error should not cause termination of the entire program. Thus a warning and 
+the erroneous line's number is displayed, the line ignored and the program continued.
+
+
+_______________________________________________________________________________________________________________________________________
+4) An opcode is not supplied  with enough operands
+_______________________________________________________________________________________________________________________________________
+On ecountering this error this message is printed on the console :
+
+	"WARNING! ZeroOperandsException"
+	"--- No operand is supplied for opcode ADD at line 4 ---"
+
+Following this the entire line is ignored and the assembler moves on to the next line. The line containing the incorrect number
+of operands is treated as a comment i.e. it is not evaluated. All the symbols and the operands in this line are removed from
+the symbol table and opcode table. This error occurs when less than the number of operands needed for an opcode are
+specified. We have treated it this way as a single error should not cause termination of the entire program. Thus a warning and 
+the erroneous line's number is displayed, the line ignored and the program continued.
+
+
+_______________________________________________________________________________________________________________________________________
+5) An opcode is supplied  with too many operands 
+_______________________________________________________________________________________________________________________________________
+On ecountering this error this message is printed on the console :
+
+	"WARNING! MultipleOperandsException"
+	"--- Only one operand needed for opcode ADD at line 4 ---"
+
+Following this only the first operand specified is treated as the operand for the opcode. The other opcode is ignored and the 
+assembler moves on to the next line. The rest of the symbols is not taken into account and not mentioned in the symbol 
+table. This error occurs when more than the number of operands needed for an opcode are specified. We have treated it this
+way as a single error should not cause termination of the entire program. Thus a warning and the erroneous line's number is 
+displayed, the line ignored and the program continued.
+
+
+_______________________________________________________________________________________________________________________________________
+6) The STP statement is missing
+_______________________________________________________________________________________________________________________________________
+On ecountering this error this message is printed on the console :
+
+	"WARNING! StopStatementMissingException"
+	"--- Stop statement missing in program ---"
+
+Following this the program is completed normally. This is because the absence of the STP statement is a trivial error. It does
+not really affect the program. The program can still be carried out and the execution can be stopped once the end of the 
+instruction set is reached. We have treated it this way as a single error should not cause termination of the entire program. 
+Thus a warning and the erroneous line's number is displayed, the line ignored and the program continued.
+
+
+_______________________________________________________________________________________________________________________________________
+NOTE: LINE NUMBERS HAVE BEEN TAKEN TO START FROM 1 AND CONTINUE AS 1,2,3,4,5,... .
+_______________________________________________________________________________________________________________________________________
+
+
+_______________________________________________________________________________________________________________________________________
+NAME OF FILES SUBMITTED 
+_______________________________________________________________________________________________________________________________________
+
+1) Symbols.java
+2) Opcodes.java
+3) Pass1.java
+4) Pass2.java
+5) Assembler.java
+6) 2019228_2019412_Input.txt
+
+_______________________________________________________________________________________________________________________________________
+THE END
+_______________________________________________________________________________________________________________________________________
