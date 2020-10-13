@@ -1,0 +1,21 @@
+^^input file for undefined symbol error
+ 	INP X
+	INP Y
+	LAC Y
+ LOOP	SUB X
+	SAC Y
+	BRN REM
+	LAC Q
+	ADD Z
+	SAC Q
+	LAC Y
+	BRP LOOP
+ REM	ADD X
+	SAC R
+ STP
+
+X DW '5'
+Y DW '4'
+Q DW '3'
+^^Z DW '2'
+R DW '1'

@@ -1,0 +1,17 @@
+        	INP X		
+ 	INP Y		
+
+ LOOP	LAC Y
+ 	ADDD RESULT
+	SAC RESULT
+	LAC X
+	SUB Z
+	SAC X
+	BRP LOOP
+	DSP RESULT
+STP
+
+X DW '7'
+Y DW '3'
+Z DC '1'
+RESULT DW '0'

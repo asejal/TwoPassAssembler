@@ -1,0 +1,14 @@
+^^invalid opcode here
+LAC 	I
+ADD	J
+SAC	INTER
+LAC 	K
+ABC	L	
+MUL 	INTER	
+SAC	INTER
+
+I	DW	'4'
+J	DW	'5'
+K	DC	'6'
+L	DW	'7'
+INTER  	DB  	'0'
